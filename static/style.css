@@ -1,0 +1,30 @@
+.bg-image{
+    background-image: url(../static/img/Mario_background.jpg);
+    height: 627px;
+    background-color: #cccccc;
+    background-size: cover;
+    background-repeat: no-repeat,
+}
+.my_navbar {
+    Background-color: black;
+}
+
+.Logo_text{
+    color: white;
+    font-family: "OCR A Extended";
+    font-style: italic;
+    font-weight: bold;
+    font-size: 60px;
+}
+.Logo_text:hover{
+    color: white;
+}
+
+.speed-run-card-header{
+    background-color: black;
+    color: white;
+    font-family: "OCR A Extended";
+    font-style: italic;
+    font-weight: bold;
+    font-size: 30px;
+}
