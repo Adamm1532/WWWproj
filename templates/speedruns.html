@@ -1,0 +1,86 @@
+{%  extends "base.html" %}
+
+{%  block content %}
+    <div class="bg-image">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 my-5">
+                <div class="card">
+                    <div class="card-header speed-tabs">
+                        <ul class="nav nav-tabs card-header-tabs speed-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="mario_press">Mario 64</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="celeste_press">Celeste</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="hollow_press">Hollow Knight</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body" style="background-color: black">
+                        {% if current_user.is_authenticated %}
+                            <a href="/add_speedrun" class="btn btn-success btn-block" style="width: 100%">Add speedrun!</a>
+                        {% else %}
+                            <p class="card-text">Must be logged in to submit speedrun</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-body change_speedrun" style="background-color: black">
+                        {#                        pagination = 11/10#}
+                        <h5 class="card-title speed-run-title">Super Mario 64 Speedruns (16 star)</h5>
+{#                            <img src="http://img.youtube.com/vi/OgzQg_DIATA/default.jpg" alt="Youtube Thumbnail">#}
+                        {% for speedrun in mario_speedruns %}
+                            <p class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user }}, {{ speedrun.link_id }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("celeste_press").addEventListener("click", function() {
+            var background = document.querySelector(".bg-image");
+            background.style.backgroundImage = "url('../static/img/celeste_background.jpg')";
+            var tabs = document.querySelectorAll(".nav-link");
+            tabs.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+            document.getElementById("celeste_press").classList.add("active");
+            var cardBody = document.querySelector(".change_speedrun");
+            cardBody.innerHTML = `<h5 class="card-title speed-run-title">Celeste Any%</h5>
+                {% for speedrun in celeste_speedruns %}
+                        <p class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user }}, {{ speedrun.link_id }}</p>
+                {% endfor %}`;
+        });
+
+        document.getElementById("mario_press").addEventListener("click", function() {
+            var background = document.querySelector(".bg-image");
+            background.style.backgroundImage = "url('../static/img/Mario_background.jpg')";
+            var tabs = document.querySelectorAll(".nav-link");
+            tabs.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+            document.getElementById("mario_press").classList.add("active");
+            var cardBody = document.querySelector(".change_speedrun");
+            cardBody.innerHTML = `<h5 class="card-title speed-run-title">Super Mario 64 Speedruns (16 star)</h5>
+                {% for speedrun in mario_speedruns %}
+                        <p class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user }}, {{ speedrun.link_id }}</p>
+                {% endfor %}`;
+        });
+
+        document.getElementById("hollow_press").addEventListener("click", function() {
+            var background = document.querySelector(".bg-image");
+            background.style.backgroundImage = "url('../static/img/hollow_knight_background.jpg')";
+            var tabs = document.querySelectorAll(".nav-link");
+            tabs.forEach(function(tab) {
+                tab.classList.remove('active');
+            });
+            document.getElementById("hollow_press").classList.add("active");
+            var cardBody = document.querySelector(".change_speedrun");
+            cardBody.innerHTML = `<h5 class="card-title speed-run-title">Hollow Knight Any%</h5>
+                {% for speedrun in hollow_knight_speedruns %}
+                        <p class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user }}, {{ speedrun.link_id }}</p>
+                {% endfor %}`;
+        });
+    </script>
+{%  endblock %}

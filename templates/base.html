@@ -19,83 +19,15 @@
                     SpeedGames
                 </a>
             </div>
+            {% if current_user.is_authenticated %}
+            <p class="text-nowrap pt-md-3 me-md-3" style="color: white">Hello, {{ current_user.username }}!</p>
+            <a href="/logout" class="btn btn-danger text-nowrap me-md-5">Logout</a>
+            {% else %}
             <a href="/signup" class="btn btn-danger text-nowrap me-md-2">Sign up</a>
             <a href="/login" class="btn btn-danger me-md-5">Login</a>
+            {% endif %}
         </nav>
     </header>
-    <div class="bg-image">
-        <div class="row justify-content-center">
-            <div class="col-lg-7 my-5">
-                <div class="card">
-                    <div class="card-header speed-tabs">
-                        <ul class="nav nav-tabs card-header-tabs speed-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="mario_press">Mario 64</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="celeste_press">Celeste</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="hollow_press">Hollow Knight</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body" style="background-color: black">
-{#                        pagination = 11/10#}
-                        <h5 class="card-title speed-run-title">Super Mario 64 Speedruns (16 star)</h5>
-                        {% for speedrun in mario_speedruns %}
-                        <p class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user }}, {{ speedrun.link }}</p>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        document.getElementById("celeste_press").addEventListener("click", function() {
-            var background = document.querySelector(".bg-image");
-            background.style.backgroundImage = "url('../static/img/celeste_background.jpg')";
-            var tabs = document.querySelectorAll(".nav-link");
-            tabs.forEach(function(tab) {
-                tab.classList.remove('active');
-            });
-            document.getElementById("celeste_press").classList.add("active");
-            var cardBody = document.querySelector(".card-body");
-            cardBody.innerHTML = `<h5 class="card-title speed-run-title">Celeste Any%</h5>
-                {% for speedrun in celeste_speedruns %}
-                        <p class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user }}, {{ speedrun.link }}</p>
-                {% endfor %}`;
-        });
-
-        document.getElementById("mario_press").addEventListener("click", function() {
-            var background = document.querySelector(".bg-image");
-            background.style.backgroundImage = "url('../static/img/Mario_background.jpg')";
-            var tabs = document.querySelectorAll(".nav-link");
-            tabs.forEach(function(tab) {
-                tab.classList.remove('active');
-            });
-            document.getElementById("mario_press").classList.add("active");
-            var cardBody = document.querySelector(".card-body");
-            cardBody.innerHTML = `<h5 class="card-title speed-run-title">Super Mario 64 Speedruns (16 star)</h5>
-                {% for speedrun in mario_speedruns %}
-                        <p class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user }}, {{ speedrun.link }}</p>
-                {% endfor %}`;
-        });
-
-        document.getElementById("hollow_press").addEventListener("click", function() {
-            var background = document.querySelector(".bg-image");
-            background.style.backgroundImage = "url('../static/img/hollow_knight_background.jpg')";
-            var tabs = document.querySelectorAll(".nav-link");
-            tabs.forEach(function(tab) {
-                tab.classList.remove('active');
-            });
-            document.getElementById("hollow_press").classList.add("active");
-            var cardBody = document.querySelector(".card-body");
-            cardBody.innerHTML = `<h5 class="card-title speed-run-title">Hollow Knight Any%</h5>
-                {% for speedrun in hollow_knight_speedruns %}
-                        <p class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user }}, {{ speedrun.link }}</p>
-                {% endfor %}`;
-        });
-    </script>
+    {% block content %}{% endblock %}
 </body>
 </html>
