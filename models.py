@@ -37,6 +37,8 @@ class User(db.Model, UserMixin):
     mario_speedruns = relationship('Mario_Speedruns', back_populates='user', lazy=True)
     celeste_speedruns = relationship('Celeste_Speedruns', back_populates='user', lazy=True)
     hollow_knight_speedruns = relationship('Hollow_Knight_Speedruns', back_populates='user', lazy=True)
+    def has_role(self, role):
+        return role in self.roles
 
 class Mario_Speedruns(db.Model):
     __tablename__ = 'mario_speedruns'

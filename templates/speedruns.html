@@ -24,6 +24,9 @@
                         {% else %}
                             <p class="card-text">Must be logged in to submit speedrun</p>
                         {% endif %}
+{#                        {% if current_user.has_role('moderator') %}#}
+{#                            <a href="/add_speedrun" class="btn btn-success btn-block" style="width: 100%">LOLOL</a>#}
+{#                        {% endif %}#}
                     </div>
                     <div class="card-body change_speedrun" style="background-color: black">
                         {#                        pagination = 11/10#}
