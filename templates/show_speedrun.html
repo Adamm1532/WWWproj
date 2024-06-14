@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{%  block content %}
+    <div style="background-color: #2a2b2b">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 my-5">
+                <div class="card-header">
+                    <h3 class="text-center" style="color: white; font-weight: bold">Speedrun</h3>
+                </div>
+                <div class="card-body" style="background-color: black">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ speedrun.link_id }}" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <p>Submitted by: {{ speedrun.user.username }}</p>
+                    <p>On: {{ speedrun.date }}</p>
+                    <p>Time: {{ speedrun.time }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

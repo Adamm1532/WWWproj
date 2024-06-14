@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+    <div style="background-color: #2a2b2b">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 my-5">
+                <h3 class="text-center" style="color: white; font-weight: bold">Add Speedrun</h3>
+                <form method="POST" action="{{ url_for('add_speedrun') }}">
+                    {{ form.csrf_token }}
+                    <div class="mb-3">
+                        {{ form.time.label(class_="form-label") }}: {{ form.time(class_="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.date.label(class_="form-label") }}: {{ form.date(class_="form-control") }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.link_id.label(class_="form-label") }}: {{ form.link_id(class_="form-control", id_="video-input") }}
+                    </div>
+                    <div id="video-preview"></div>
+                    <div class="mb-3">
+                        {{ form.category.label(class_="form-label") }}: {{ form.category(class_="form-control") }}
+                    </div>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul class=flashes>
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
+                    <button type="submit" class="btn btn-danger">Add Speedrun</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        {#document.getElementById("video-input").addEventListener("input", function() {#}
+        {#    var videoId = document.getElementById("video-input").value;#}
+        {#    var videoPreview = document.getElementById("video-preview");#}
+        {#    videoPreview.innerHTML = `<iframe width="560" height="315" src="${videoId}" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>`;#}
+        {#});#}
+    </script>
+{% endblock %}
