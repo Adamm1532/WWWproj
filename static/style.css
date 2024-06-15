@@ -1,8 +1,8 @@
 .bg-image{
     background-image: url(../static/img/Mario_background.jpg);
-    height: 600px;
+    height: 1000px;
+    width: 100%;
     background-color: #cccccc;
-    background-size: cover;
     box-shadow: 0 0 150px 150px black inset;
 }
 

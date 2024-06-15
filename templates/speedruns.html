@@ -24,16 +24,12 @@
                         {% else %}
                             <p class="card-text">Must be logged in to submit speedrun</p>
                         {% endif %}
-{#                        {% if current_user.has_role('moderator') %}#}
-{#                            <a href="/add_speedrun" class="btn btn-success btn-block" style="width: 100%">LOLOL</a>#}
-{#                        {% endif %}#}
                     </div>
                     <div class="card-body change_speedrun" style="background-color: black">
                         {#                        pagination = 11/10#}
-                        <h5 class="card-title speed-run-title">Super Mario 64 Speedruns (16 star)</h5>
-{#                            <img src="http://img.youtube.com/vi/OgzQg_DIATA/default.jpg" alt="Youtube Thumbnail">#}
+                        <h5 class="card-title speed-run-title mt-2">Super Mario 64 Speedruns (16 star)</h5>
                         {% for speedrun in mario_speedruns %}
-                            <a href="{{ url_for('show_speedrun', id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
+                            <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
                             {#change speedrun id to just numbers going up, since 1st place second place etc.#}
                         {% endfor %}
                     </div>
@@ -51,9 +47,9 @@
             });
             document.getElementById("celeste_press").classList.add("active");
             var cardBody = document.querySelector(".change_speedrun");
-            cardBody.innerHTML = `<h5 class="card-title speed-run-title">Celeste Any%</h5>
+            cardBody.innerHTML = `<h5 class="card-title speed-run-title mt-2">Celeste Any%</h5>
                 {% for speedrun in celeste_speedruns %}
-                        <a href="{{ url_for('show_speedrun', id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
+                        <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
                 {% endfor %}`;
         });
 
@@ -66,9 +62,9 @@
             });
             document.getElementById("mario_press").classList.add("active");
             var cardBody = document.querySelector(".change_speedrun");
-            cardBody.innerHTML = `<h5 class="card-title speed-run-title">Super Mario 64 Speedruns (16 star)</h5>
+            cardBody.innerHTML = `<h5 class="card-title speed-run-title mt-2">Super Mario 64 Speedruns (16 star)</h5>
                 {% for speedrun in mario_speedruns %}
-                        <a href="{{ url_for('show_speedrun', id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
+                        <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
                 {% endfor %}`;
         });
 
@@ -81,9 +77,9 @@
             });
             document.getElementById("hollow_press").classList.add("active");
             var cardBody = document.querySelector(".change_speedrun");
-            cardBody.innerHTML = `<h5 class="card-title speed-run-title">Hollow Knight Any%</h5>
+            cardBody.innerHTML = `<h5 class="card-title speed-run-title mt-2">Hollow Knight Any%</h5>
                 {% for speedrun in hollow_knight_speedruns %}
-                        <a href="{{ url_for('show_speedrun', id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
+                        <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
                 {% endfor %}`;
         });
     </script>

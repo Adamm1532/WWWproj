@@ -20,11 +20,18 @@
                 </a>
             </div>
             {% if current_user.is_authenticated %}
-            <p class="text-nowrap pt-md-3 me-md-3" style="color: white">Hello, {{ current_user.username }}!</p>
-            <a href="/logout" class="btn btn-danger text-nowrap me-md-5">Logout</a>
+                <p class="text-nowrap pt-md-3 me-md-3" style="color: white">Hello, {{ current_user.username }}!</p>
+                {% if current_user.has_role('moderator') %}
+                    <a href="{{ url_for('waitlist') }}" class="btn btn-warning text-nowrap me-md-3">Waitlist</a>
+                {% else %}
+                    {% if current_user.moderator_request == false %}
+                    	<a href="{{ url_for('moderator_requests') }}" class="btn btn-warning text-nowrap me-md-3">Become a moderator!</a>
+                    {% endif %}
+                {% endif %}
+                <a href="/logout" class="btn btn-danger text-nowrap me-md-5">Logout</a>
             {% else %}
-            <a href="/register" class="btn btn-danger text-nowrap me-md-2">Sign up</a>
-            <a href="/login" class="btn btn-danger me-md-5">Login</a>
+                <a href="/register" class="btn btn-danger text-nowrap me-md-2">Sign up</a>
+                <a href="/login" class="btn btn-danger me-md-5">Login</a>
             {% endif %}
         </nav>
     </header>

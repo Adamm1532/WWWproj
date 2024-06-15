@@ -34,38 +34,19 @@ class User(db.Model, UserMixin):
     fs_uniquifier = mapped_column(sa.String(255), unique=True, nullable=False)
     confirmed_at = mapped_column(sa.DateTime())
     roles = relationship('Role', secondary='roles_users', back_populates="users", lazy=True)
-    mario_speedruns = relationship('Mario_Speedruns', back_populates='user', lazy=True)
-    celeste_speedruns = relationship('Celeste_Speedruns', back_populates='user', lazy=True)
-    hollow_knight_speedruns = relationship('Hollow_Knight_Speedruns', back_populates='user', lazy=True)
+    moderator_request = mapped_column(sa.Boolean(), nullable=False, default=False)
+    speedruns = relationship('Speedruns', back_populates='user', lazy=True)
     def has_role(self, role):
         return role in self.roles
 
-class Mario_Speedruns(db.Model):
-    __tablename__ = 'mario_speedruns'
+class Speedruns(db.Model):
+    __tablename__ = 'speedruns'
     id = mapped_column(sa.Integer, primary_key=True)
     user_id = mapped_column(sa.Integer(), sa.ForeignKey('user.id'), nullable=False)
     time = mapped_column(sa.Interval(), nullable=False)
     date = mapped_column(sa.DateTime(), nullable=False, default=datetime.datetime.now(datetime.timezone.utc))
     link_id = mapped_column(sa.String(255), nullable=False)
     verified = mapped_column(sa.Boolean(), nullable=False, default=False)
-    user = relationship("User", back_populates='mario_speedruns', lazy=False)
+    category = mapped_column(sa.String(255), nullable=False)
+    user = relationship("User", back_populates='speedruns', lazy=False)
 
-class Celeste_Speedruns(db.Model):
-    __tablename__ = 'celeste_speedruns'
-    id = mapped_column(sa.Integer, primary_key=True)
-    user_id = mapped_column(sa.Integer(), sa.ForeignKey('user.id'), nullable=False)
-    time = mapped_column(sa.Interval(), nullable=False)
-    date = mapped_column(sa.DateTime(), nullable=False, default=datetime.datetime.now(datetime.timezone.utc))
-    link_id = mapped_column(sa.String(255), nullable=False)
-    verified = mapped_column(sa.Boolean(), nullable=False, default=False)
-    user = relationship("User", back_populates='celeste_speedruns', lazy=False)
-
-class Hollow_Knight_Speedruns(db.Model):
-    __tablename__ = 'hollow_knight_speedruns'
-    id = mapped_column(sa.Integer, primary_key=True)
-    user_id = mapped_column(sa.Integer(), sa.ForeignKey('user.id'), nullable=False)
-    time = mapped_column(sa.Interval(), nullable=False)
-    date = mapped_column(sa.DateTime(), nullable=False, default=datetime.datetime.now(datetime.timezone.utc))
-    link_id = mapped_column(sa.String(255), nullable=False)
-    verified = mapped_column(sa.Boolean(), nullable=False, default=False)
-    user = relationship("User", back_populates='hollow_knight_speedruns', lazy=False)

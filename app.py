@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, url_for, flash, session
-from models import db, Mario_Speedruns, Celeste_Speedruns, Hollow_Knight_Speedruns, User, Role
-from flask_security import SQLAlchemyUserDatastore, Security, hash_password, roles_required, verify_password, login_user, logout_user, anonymous_user_required, login_required, current_user
+from flask import Flask, render_template, redirect, url_for, flash
+from models import db, Speedruns, User, Role
+from flask_security import SQLAlchemyUserDatastore, Security, hash_password, roles_required, verify_password, \
+    login_user, logout_user, anonymous_user_required, login_required, current_user
 from wtforms import StringField, PasswordField, validators, SelectField
 from flask_wtf import FlaskForm
 from wtforms_components import DateField, TimeField, DateRange
@@ -31,19 +32,12 @@ with app.app_context():
 
 @app.route('/', methods=['GET'])
 def base():
-    mario_speedruns = Mario_Speedruns.query.order_by(Mario_Speedruns.time)
-    celeste_speedruns = Celeste_Speedruns.query.order_by(Celeste_Speedruns.time)
-    hollow_knight_speedruns = Hollow_Knight_Speedruns.query.order_by(Hollow_Knight_Speedruns.time)
-    return render_template('speedruns.html', mario_speedruns=mario_speedruns, celeste_speedruns=celeste_speedruns,
-                           hollow_knight_speedruns=hollow_knight_speedruns)
-
-
-@app.route('/waitlist', methods=['GET'])
-@roles_required('moderator')
-def waitlist():
-    mario_speedruns = Mario_Speedruns.query.order_by(Mario_Speedruns.time)
-    celeste_speedruns = Celeste_Speedruns.query.order_by(Celeste_Speedruns.time)
-    hollow_knight_speedruns = Hollow_Knight_Speedruns.query.order_by(Hollow_Knight_Speedruns.time)
+    mario_speedruns = Speedruns.query.order_by(Speedruns.time).filter(
+        Speedruns.category == 'mario', Speedruns.verified == True)
+    celeste_speedruns = Speedruns.query.order_by(Speedruns.time).filter(
+        Speedruns.category == 'celeste', Speedruns.verified == True)
+    hollow_knight_speedruns = Speedruns.query.order_by(Speedruns.time).filter(
+        Speedruns.category == 'hollow_knight', Speedruns.verified == True)
     return render_template('speedruns.html', mario_speedruns=mario_speedruns, celeste_speedruns=celeste_speedruns,
                            hollow_knight_speedruns=hollow_knight_speedruns)
 
@@ -52,7 +46,8 @@ class LoginForm(FlaskForm):
     email = StringField('Email', [validators.DataRequired("Please enter your email"),
                                   validators.Email(message="Please enter a valid email")])
     password = PasswordField('Password', [validators.DataRequired("Please enter password"),
-                                          validators.Length(min=7, max=25, message="Password must be between 7 and 25 characters")])
+                                          validators.Length(min=7, max=25,
+                                                            message="Password must be between 7 and 25 characters")])
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -63,21 +58,27 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and verify_password(form.password.data, user.password):
             login_user(user)
-            session['_flashes'].clear()
             return redirect(url_for('base'))
         else:
             flash('Invalid email or password')
     return render_template('login.html', form=form)
+
 
 @app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
     return redirect(url_for('base'))
 
+
 class RegisterForm(FlaskForm):
-    username = StringField('Username', [validators.DataRequired("Please enter your username"), validators.Length(min=4, max=25, message="Username must be between 4 and 25 characters")])
-    email = StringField('Email', [validators.DataRequired("Please enter your email"), validators.Email(message="Please enter a valid email")])
-    password = PasswordField('Password', [validators.DataRequired("Please enter password"), validators.Length(min=7, max=25, message="Password must be between 7 and 25 characters")])
+    username = StringField('Username', [validators.DataRequired("Please enter your username"),
+                                        validators.Length(min=4, max=25,
+                                                          message="Username must be between 4 and 25 characters")])
+    email = StringField('Email', [validators.DataRequired("Please enter your email"),
+                                  validators.Email(message="Please enter a valid email")])
+    password = PasswordField('Password', [validators.DataRequired("Please enter password"),
+                                          validators.Length(min=7, max=25,
+                                                            message="Password must be between 7 and 25 characters")])
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -104,11 +105,17 @@ def register():
 
 
 class AddForm(FlaskForm):
-    time = TimeField('Enter the approximate time of the speedrun:', [validators.DataRequired("Please enter time"), DateRange(min=datetime.time(0, 1))])
-    date = DateField('Enter when the speedrun was achieved', [validators.DataRequired("Please enter date"), DateRange(min=datetime.date(1996, 1, 1))])
-    link_id = StringField('Enter the link to a youtube video of the speedrun', [validators.DataRequired("Please enter link"),
-                                                                                validators.Regexp('^(https:\/\/www.youtube.com\/watch\?v=)([a-zA-Z0-9_-]{11})$', message="Not a valid youtube link")])
-    category = SelectField('Select the category of the speedrun:', choices=[('mario', 'Mario'), ('celeste', 'Celeste'), ('hollow_knight', 'Hollow Knight')])
+    time = TimeField('Enter the approximate time of the speedrun:',
+                     [validators.DataRequired("Please enter time"), DateRange(min=datetime.time(0, 0, 0, 1))],
+                     format='%H:%M:%S', render_kw={"step": "1"})
+    date = DateField('Enter when the speedrun was achieved',
+                     [validators.DataRequired("Please enter date"), DateRange(min=datetime.date(1996, 1, 1))])
+    link_id = StringField('Enter the link to a youtube video of the speedrun',
+                          [validators.DataRequired("Please enter link"),
+                           validators.Regexp('^(https:\/\/www.youtube.com\/watch\?v=)([a-zA-Z0-9_-]{11})$',
+                                             message="Not a valid youtube link")])
+    category = SelectField('Select the category of the speedrun:',
+                           choices=[('mario', 'Mario'), ('celeste', 'Celeste'), ('hollow_knight', 'Hollow Knight')])
 
 
 @app.route('/add_speedrun', methods=['GET', 'POST'])
@@ -118,48 +125,100 @@ def add_speedrun():
     if form.validate_on_submit():
         category = form.category.data
         link_id = form.link_id.data
-        link_id = link_id[link_id.rfind('=')+1:]
+        link_id = link_id[link_id.rfind('=') + 1:]
         speedrun_time = form.time.data
         speedrun_time = datetime.datetime.combine(datetime.date.min, speedrun_time) - datetime.datetime.min
         if category == 'mario':
-            speedrun = Mario_Speedruns(
+            speedrun = Speedruns(
                 user_id=current_user.id,
                 time=speedrun_time,
                 date=form.date.data,
-                link_id=link_id
+                link_id=link_id,
+                category=category
             )
         elif category == 'celeste':
-            speedrun = Celeste_Speedruns(
+            speedrun = Speedruns(
                 user_id=current_user.id,
                 time=speedrun_time,
                 date=form.date.data,
-                link_id=link_id
+                link_id=link_id,
+                category=category
             )
         else:
-            speedrun = Hollow_Knight_Speedruns(
+            speedrun = Speedruns(
                 user_id=current_user.id,
                 time=speedrun_time,
                 date=form.date.data,
-                link_id=link_id
+                link_id=link_id,
+                category=category
             )
         db.session.add(speedrun)
         db.session.commit()
-        return redirect(url_for('base'))
-    else:
-        flash('Invalid data')
+        return redirect(url_for('show_speedrun', speedrun_id=speedrun.id))
     return render_template('add_speedrun.html', form=form)
+
 
 @app.route('/show_speedrun/<int:speedrun_id>', methods=['GET'])
 def show_speedrun(speedrun_id=0):
-    if(speedrun_id<=0):
+    if speedrun_id <= 0:
         return redirect(url_for('base'))
-    speedrun = Mario_Speedruns.query.get_or_404(speedrun_id)
+    speedrun = Speedruns.query.get_or_404(speedrun_id)
     if speedrun.verified is False and current_user is not speedrun.user and not current_user.has_role('moderator'):
         return redirect(url_for('base'))
-    print(speedrun.link_id)
+    speedrun.date = speedrun.date.strftime('%d.%m.%Y')
     return render_template('show_speedrun.html', speedrun=speedrun)
 
 
+@app.route('/delete_speedrun/<int:speedrun_id>', methods=['GET'])
+@login_required
+def delete_speedrun(speedrun_id=0):
+    if speedrun_id <= 0:
+        return redirect(url_for('base'))
+    speedrun = Speedruns.query.get_or_404(speedrun_id)
+    if current_user is speedrun.user or current_user.has_role('moderator'):
+        db.session.delete(speedrun)
+        db.session.commit()
+    return redirect(url_for('base'))
+
+
+@app.route('/waitlist', methods=['GET'])
+@roles_required('moderator')
+def waitlist():
+    waitlists = Speedruns.query.order_by(Speedruns.date).where(Speedruns.verified == False)
+    mod_requests = User.query.filter_by(moderator_request=True)
+    return render_template('waitlist.html', waitlist=waitlists, mod_requests=mod_requests)
+
+@app.route('/verify_speedrun/<int:speedrun_id>', methods=['GET'])
+@roles_required('moderator')
+def verify_speedrun(speedrun_id=0):
+    if speedrun_id <= 0:
+        return redirect(url_for('base'))
+    speedrun = Speedruns.query.get_or_404(speedrun_id)
+    if speedrun.verified is True:
+        return redirect(url_for('waitlist'))
+    if speedrun.user_id == current_user.id:
+        return redirect(url_for('waitlist'))
+    speedrun.verified = True
+    db.session.commit()
+    return redirect(url_for('waitlist'))
+
+@app.route('/moderator_requests', methods=['GET'])
+@login_required
+def moderator_requests():
+    current_user.moderator_request = True
+    db.session.commit()
+    return redirect(url_for('base'))
+
+@app.route('/moderator_approve/<int:user_id>', methods=['GET'])
+@roles_required('moderator')
+def moderator_approve(user_id=0):
+    if user_id <= 0:
+        return redirect(url_for('waitlist'))
+    user = User.query.get_or_404(user_id)
+    user_datastore.add_role_to_user(user, 'moderator')
+    user.moderator_request = False
+    db.session.commit()
+    return redirect(url_for('waitlist'))
 
 
 if __name__ == '__main__':
