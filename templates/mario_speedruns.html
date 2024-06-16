@@ -1,0 +1,42 @@
+{%  extends "base.html" %}
+
+{% import "utils.html" as utils %}
+
+{%  block content %}
+    <div class="bg-image-mario">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 my-5">
+                <div class="card">
+                    <div class="card-header speed-tabs">
+                        <ul class="nav nav-tabs card-header-tabs speed-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active">Mario 64</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url_for('celeste_speedruns') }}" class="nav-link">Celeste</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url_for('hollow_knight_speedruns') }}" class="nav-link">Hollow Knight</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body" style="background-color: black">
+                        {% if current_user.is_authenticated %}
+                            <a href="/add_speedrun" class="btn btn-success btn-block" style="width: 100%">Add speedrun!</a>
+                        {% else %}
+                            <p class="card-text">Must be logged in to submit speedrun</p>
+                        {% endif %}
+                    </div>
+                    <div class="card-body change_speedrun" style="background-color: black">
+                        <h5 class="card-title speed-run-title mt-2">Super Mario 64 Speedruns (16 star)</h5>
+                        {{ utils.render_pagination(mario_speedruns, 'mario_speedruns') }}
+                        {% for speedrun in mario_speedruns.items %}
+                            <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
+                        {% endfor %}
+                        {{ utils.render_pagination(mario_speedruns, 'mario_speedruns') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{%  endblock %}

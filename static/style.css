@@ -1,5 +1,21 @@
-.bg-image{
+.bg-image-mario{
     background-image: url(../static/img/Mario_background.jpg);
+    height: 1000px;
+    width: 100%;
+    background-color: #cccccc;
+    box-shadow: 0 0 150px 150px black inset;
+}
+
+.bg-image-celeste{
+    background-image: url(../static/img/celeste_background.jpg);
+    height: 1000px;
+    width: 100%;
+    background-color: #cccccc;
+    box-shadow: 0 0 150px 150px black inset;
+}
+
+.bg-image-hollow-knight{
+    background-image: url(../static/img/hollow_knight_background.jpg);
     height: 1000px;
     width: 100%;
     background-color: #cccccc;

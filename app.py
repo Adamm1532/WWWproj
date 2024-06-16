@@ -33,20 +33,29 @@ with app.app_context():
 
 @app.route('/', methods=['GET'])
 def index():
-    return redirect(url_for('base'))
+    return redirect(url_for('mario_speedruns'))
 
-@app.route('/base', methods=['GET'])
-@app.route('/base/page/<int:page>', methods=['GET'])
-def base(page=1):
-    count = Speedruns.query.count()
+@app.route('/mario_speedruns', methods=['GET'])
+@app.route('/mario_speedruns/page/<int:page>', methods=['GET'])
+def mario_speedruns(page=1):
     mario_speedruns = Speedruns.query.order_by(Speedruns.time).filter(
         Speedruns.category == 'mario', Speedruns.verified == True).paginate(page=page, per_page=5, error_out=False)
+    return render_template('mario_speedruns.html', mario_speedruns=mario_speedruns)
+
+@app.route('/celeste_speedruns', methods=['GET'])
+@app.route('/celeste_speedruns/page/<int:page>', methods=['GET'])
+def celeste_speedruns(page=1):
     celeste_speedruns = Speedruns.query.order_by(Speedruns.time).filter(
         Speedruns.category == 'celeste', Speedruns.verified == True).paginate(page=page, per_page=5, error_out=False)
+    return render_template('celeste_speedruns.html', celeste_speedruns=celeste_speedruns)
+
+@app.route('/hollow_knight_speedruns', methods=['GET'])
+@app.route('/hollow_knight_speedruns/page/<int:page>', methods=['GET'])
+def hollow_knight_speedruns(page=1):
     hollow_knight_speedruns = Speedruns.query.order_by(Speedruns.time).filter(
-        Speedruns.category == 'hollow_knight', Speedruns.verified == True).paginate(page=page, per_page=5, error_out=False)
-    return render_template('speedruns.html', mario_speedruns=mario_speedruns, celeste_speedruns=celeste_speedruns,
-                           hollow_knight_speedruns=hollow_knight_speedruns)
+        Speedruns.category == 'hollow_knight', Speedruns.verified == True).paginate(page=page, per_page=5,
+                                                                                    error_out=False)
+    return render_template('hollow_knight_speedruns.html', hollow_knight_speedruns=hollow_knight_speedruns)
 
 
 class LoginForm(FlaskForm):
@@ -65,7 +74,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and verify_password(form.password.data, user.password):
             login_user(user)
-            return redirect(url_for('base'))
+            return redirect(url_for('index'))
         else:
             flash('Invalid email or password')
     return render_template('login.html', form=form)
@@ -74,7 +83,7 @@ def login():
 @app.route('/logout', methods=['GET'])
 def logout():
     logout_user()
-    return redirect(url_for('base'))
+    return redirect(url_for('index'))
 
 
 class RegisterForm(FlaskForm):
@@ -107,7 +116,7 @@ def register():
             db.session.add(user2)
             db.session.commit()
             login_user(user2)
-            return redirect(url_for('base'))
+            return redirect(url_for('index'))
     return render_template('register.html', form=form)
 
 
@@ -168,10 +177,10 @@ def add_speedrun():
 @app.route('/show_speedrun/<int:speedrun_id>', methods=['GET'])
 def show_speedrun(speedrun_id=0):
     if speedrun_id <= 0:
-        return redirect(url_for('base'))
+        return redirect(url_for('index'))
     speedrun = Speedruns.query.get_or_404(speedrun_id)
     if speedrun.verified is False and current_user is not speedrun.user and not current_user.has_role('moderator'):
-        return redirect(url_for('base'))
+        return redirect(url_for('index'))
     speedrun.date = speedrun.date.strftime('%d.%m.%Y')
     return render_template('show_speedrun.html', speedrun=speedrun)
 
@@ -180,12 +189,12 @@ def show_speedrun(speedrun_id=0):
 @login_required
 def delete_speedrun(speedrun_id=0):
     if speedrun_id <= 0:
-        return redirect(url_for('base'))
+        return redirect(url_for('index'))
     speedrun = Speedruns.query.get_or_404(speedrun_id)
     if current_user is speedrun.user or current_user.has_role('moderator'):
         db.session.delete(speedrun)
         db.session.commit()
-    return redirect(url_for('base'))
+    return redirect(url_for('index'))
 
 
 @app.route('/waitlist', methods=['GET'])
@@ -199,7 +208,7 @@ def waitlist():
 @roles_required('moderator')
 def verify_speedrun(speedrun_id=0):
     if speedrun_id <= 0:
-        return redirect(url_for('base'))
+        return redirect(url_for('index'))
     speedrun = Speedruns.query.get_or_404(speedrun_id)
     if speedrun.verified is True:
         return redirect(url_for('waitlist'))
@@ -214,7 +223,7 @@ def verify_speedrun(speedrun_id=0):
 def moderator_requests():
     current_user.moderator_request = True
     db.session.commit()
-    return redirect(url_for('base'))
+    return redirect(url_for('index'))
 
 @app.route('/moderator_approve/<int:user_id>', methods=['GET'])
 @roles_required('moderator')
