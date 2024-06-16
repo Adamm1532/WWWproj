@@ -1,0 +1,27 @@
+{%  extends "base.html" %}
+{%  block content %}
+    <div style="background-color: black; height: 500px">
+        <div class="row justify-content-center">
+            <div class="card text-center col-lg-6 mb-4" style="border-color: black; background-color: black">
+                <div class="card header" style="background-color: black">
+                    <h3 class="mt-4" style="color: white; font-weight: bold">Waitlist</h3>
+                </div>
+                <div class="card-body">
+                    {% for speedrun in waitlist %}
+                        <br> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text"> {{ speedrun.category }} speedrun added by {{ speedrun.user.username }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="card text-center col-lg-6 mb-4" style="border-color: black; background-color: black">
+                <div class="card header" style="background-color: black">
+                    <h3 class="mt-4" style="color: white; font-weight: bold">Moderator requests</h3>
+                </div>
+                <div class="card-body">
+                    {% for requests in mod_requests %}
+                        <br> {{ requests.username }} wants to be a moderator <a href="{{ url_for('moderator_approve', user_id=requests.id) }}" class="btn btn-success btn-block">Approve request</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

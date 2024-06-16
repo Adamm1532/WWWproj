@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.sqlite"
 app.config['SECRET_KEY'] = 'hello mario'
 app.config['SECURITY_PASSWORD_SALT'] = '882777363'
+app.config['PAGINATION_PER_PAGE'] = 5
 db.init_app(app)
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 app.security = Security(app, user_datastore, register_blueprint=False)
@@ -31,13 +32,19 @@ with app.app_context():
 
 
 @app.route('/', methods=['GET'])
-def base():
+def index():
+    return redirect(url_for('base'))
+
+@app.route('/base', methods=['GET'])
+@app.route('/base/page/<int:page>', methods=['GET'])
+def base(page=1):
+    count = Speedruns.query.count()
     mario_speedruns = Speedruns.query.order_by(Speedruns.time).filter(
-        Speedruns.category == 'mario', Speedruns.verified == True)
+        Speedruns.category == 'mario', Speedruns.verified == True).paginate(page=page, per_page=5, error_out=False)
     celeste_speedruns = Speedruns.query.order_by(Speedruns.time).filter(
-        Speedruns.category == 'celeste', Speedruns.verified == True)
+        Speedruns.category == 'celeste', Speedruns.verified == True).paginate(page=page, per_page=5, error_out=False)
     hollow_knight_speedruns = Speedruns.query.order_by(Speedruns.time).filter(
-        Speedruns.category == 'hollow_knight', Speedruns.verified == True)
+        Speedruns.category == 'hollow_knight', Speedruns.verified == True).paginate(page=page, per_page=5, error_out=False)
     return render_template('speedruns.html', mario_speedruns=mario_speedruns, celeste_speedruns=celeste_speedruns,
                            hollow_knight_speedruns=hollow_knight_speedruns)
 

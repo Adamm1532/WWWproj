@@ -1,5 +1,7 @@
 {%  extends "base.html" %}
 
+{% import "utils.html" as utils %}
+
 {%  block content %}
     <div class="bg-image">
         <div class="row justify-content-center">
@@ -26,12 +28,12 @@
                         {% endif %}
                     </div>
                     <div class="card-body change_speedrun" style="background-color: black">
-                        {#                        pagination = 11/10#}
                         <h5 class="card-title speed-run-title mt-2">Super Mario 64 Speedruns (16 star)</h5>
-                        {% for speedrun in mario_speedruns %}
+                        {{ utils.render_pagination(mario_speedruns, 'base') }}
+                        {% for speedrun in mario_speedruns.items %}
                             <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
-                            {#change speedrun id to just numbers going up, since 1st place second place etc.#}
                         {% endfor %}
+                        {{ utils.render_pagination(mario_speedruns, 'base') }}
                     </div>
                 </div>
             </div>
@@ -48,9 +50,11 @@
             document.getElementById("celeste_press").classList.add("active");
             var cardBody = document.querySelector(".change_speedrun");
             cardBody.innerHTML = `<h5 class="card-title speed-run-title mt-2">Celeste Any%</h5>
+                {{ utils.render_pagination(celeste_speedruns, 'base') }}
                 {% for speedrun in celeste_speedruns %}
                         <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
-                {% endfor %}`;
+                {% endfor %}
+                {{ utils.render_pagination(celeste_speedruns, 'base') }}`;
         });
 
         document.getElementById("mario_press").addEventListener("click", function() {
@@ -63,9 +67,11 @@
             document.getElementById("mario_press").classList.add("active");
             var cardBody = document.querySelector(".change_speedrun");
             cardBody.innerHTML = `<h5 class="card-title speed-run-title mt-2">Super Mario 64 Speedruns (16 star)</h5>
+                {{ utils.render_pagination(mario_speedruns, 'base') }}
                 {% for speedrun in mario_speedruns %}
                         <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
-                {% endfor %}`;
+                {% endfor %}
+                {{ utils.render_pagination(mario_speedruns, 'base') }}`;
         });
 
         document.getElementById("hollow_press").addEventListener("click", function() {
@@ -78,9 +84,11 @@
             document.getElementById("hollow_press").classList.add("active");
             var cardBody = document.querySelector(".change_speedrun");
             cardBody.innerHTML = `<h5 class="card-title speed-run-title mt-2">Hollow Knight Any%</h5>
+                {{ utils.render_pagination(hollow_knight_speedruns, 'base') }}
                 {% for speedrun in hollow_knight_speedruns %}
                         <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
-                {% endfor %}`;
+                {% endfor %}
+                {{ utils.render_pagination(hollow_knight_speedruns, 'base') }}`;
         });
     </script>
 {%  endblock %}
