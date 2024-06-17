@@ -31,7 +31,7 @@
                         <h5 class="card-title speed-run-title mt-2">Hollow Knight Any%</h5>
                         {{ utils.render_pagination(hollow_knight_speedruns, 'hollow_knight_speedruns') }}
                         {% for speedrun in hollow_knight_speedruns %}
-                            <br> <img src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text">{{ speedrun.id }}, {{ speedrun.time }}, {{ speedrun.user.username }}, {{ speedrun.link_id }}</a>
+                            <br> <img class="ms-4" src="http://img.youtube.com/vi/{{ speedrun.link_id }}/default.jpg" alt="Youtube Thumbnail"> <a href="{{ url_for('show_speedrun', speedrun_id=speedrun.id) }}" class="card-text ms-4 speedrun-text">{{ speedrun.user.username }} achieved a time of {{ speedrun.time }}</a>
                         {% endfor %}
                         {{ utils.render_pagination(hollow_knight_speedruns, 'hollow_knight_speedruns') }}
                     </div>

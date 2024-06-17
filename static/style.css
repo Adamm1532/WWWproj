@@ -1,23 +1,18 @@
 .bg-image-mario{
     background-image: url(../static/img/Mario_background.jpg);
     height: 1000px;
-    width: 100%;
     background-color: #cccccc;
     box-shadow: 0 0 150px 150px black inset;
 }
 
 .bg-image-celeste{
     background-image: url(../static/img/celeste_background.jpg);
-    height: 1000px;
-    width: 100%;
     background-color: #cccccc;
     box-shadow: 0 0 150px 150px black inset;
 }
 
 .bg-image-hollow-knight{
     background-image: url(../static/img/hollow_knight_background.jpg);
-    height: 1000px;
-    width: 100%;
     background-color: #cccccc;
     box-shadow: 0 0 150px 150px black inset;
 }
@@ -58,11 +53,23 @@
 }
 .form-label{
     color: white;
-    font-family: "Arial";
+    font-family: "OCR A Extended";
     font-size: 20px;
 }
 .flashes{
     color: deeppink;
-    font-family: "Arial";
+    font-family: "OCR A Extended";
+    font-size: 20px;
+}
+.speedrun-text{
+    color: white;
+    text-decoration: none;
+    font-family: "OCR A Extended";
+    font-size: 20px;
+}
+.show-speedrun-text{
+    color: lightseagreen;
+    text-decoration: none;
+    font-family: "OCR A Extended";
     font-size: 20px;
 }

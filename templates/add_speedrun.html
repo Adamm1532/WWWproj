@@ -34,10 +34,18 @@
         </div>
     </div>
     <script>
-        {#document.getElementById("video-input").addEventListener("input", function() {#}
-        {#    var videoId = document.getElementById("video-input").value;#}
-        {#    var videoPreview = document.getElementById("video-preview");#}
-        {#    videoPreview.innerHTML = `<iframe width="560" height="315" src="${videoId}" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>`;#}
-        {#});#}
+        document.getElementById("video-input").addEventListener("input", function() {
+            const videoId = document.getElementById("video-input").value;
+            const videoPreview = document.getElementById("video-preview");
+            const regex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const match = videoId.match(regex);
+            const real_video = (match && match[1]) ? match[1] : null;
+            if(real_video) {
+                videoPreview.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${real_video}" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+            }
+            else {
+                videoPreview.innerHTML = "";
+            }
+        });
     </script>
 {% endblock %}
