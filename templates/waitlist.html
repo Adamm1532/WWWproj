@@ -18,7 +18,7 @@
                 </div>
                 <div class="card-body">
                     {% for requests in mod_requests %}
-                        <br> {{ requests.username }} wants to be a moderator <a href="{{ url_for('moderator_approve', user_id=requests.id) }}" class="btn btn-success btn-block">Approve request</a>
+                        <br> {{ requests.username }} wants to be a moderator <a href="{{ url_for('moderator_approve', user_id=requests.id) }}" class="btn btn-success btn-block mb-2">Approve request</a>
                     {% endfor %}
                 </div>
             </div>

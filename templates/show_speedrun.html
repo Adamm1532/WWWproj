@@ -15,7 +15,7 @@
                         </div>
                         {% if speedrun.user_id != current_user.id and current_user.has_role('moderator') and speedrun.verified == false %}
                             <div class="p-2 d-flex align-items-end mb-3">
-                                <a href="{{ url_for('verify_speedrun', speedrun_id=speedrun.id) }}" class="btn btn-warning me-2">Verify</a>
+                                <a href="{{ url_for('verify_speedrun', speedrun_id=speedrun.id) }}" class="btn btn-warning ms-5">Verify</a>
                             </div>
                         {% endif %}
                         {% if speedrun.user_id == current_user.id or current_user.has_role('moderator') %}
